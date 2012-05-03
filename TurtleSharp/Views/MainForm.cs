@@ -34,11 +34,7 @@ namespace TurtleSharp.Views
 
 		public event EventHandler<GraphicsDeviceEventArgs> DrawScene;
 
-		public event EventHandler CompileButtonClicked
-		{
-			add { this.compileButton.Click += value; }
-			remove { this.compileButton.Click -= value; }
-		}
+		public event EventHandler CompileButtonClicked;
 
 		public MainForm()
 		{
@@ -46,6 +42,8 @@ namespace TurtleSharp.Views
 
 			this.turtleGraphicsControl.Initialize += this.TurtleGraphicsControl_Initialize;
 			this.turtleGraphicsControl.Draw += this.TurtleGraphicsControl_Draw;
+
+			this.compileButton.Click += this.CompileButton_Click;
 		}
 
 		private void TurtleGraphicsControl_Initialize(object sender, GraphicsDeviceEventArgs e)
@@ -58,6 +56,25 @@ namespace TurtleSharp.Views
 		{
 			if (this.DrawScene != null)
 				this.DrawScene(this, e);
+		}
+
+		private void TriggerCompileButtonClicked()
+		{
+			if (this.CompileButtonClicked != null)
+				this.CompileButtonClicked(this, EventArgs.Empty);
+		}
+
+		private void CompileButton_Click(object sender, EventArgs e)
+		{
+			this.TriggerCompileButtonClicked();
+		}
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if ((keyData & Keys.F5) == Keys.F5)
+				this.TriggerCompileButtonClicked();
+
+			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
 		public void ClearCompilerErrors()
