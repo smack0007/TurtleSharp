@@ -9,7 +9,9 @@ namespace TurtleSharp
 		GraphicsDevice graphicsDevice;
 		Renderer renderer;
 
+		Vector2 homePosition;
 		Vector2 position;
+		float rotation;
 
 		public TurtleGraphicsRenderer(GraphicsDevice graphicsDevice)
 		{
@@ -22,17 +24,43 @@ namespace TurtleSharp
 
 		public void Begin(Vector2 position)
 		{
+			this.homePosition = position;
 			this.position = position;
+			this.rotation = 0.0f;
+
 			this.renderer.Begin();
 		}
 
-		public void Forward(int pixels)
+		public void Home()
 		{
-			Vector2 newPosition = new Vector2(this.position.X, this.position.Y - pixels);
+			this.position = homePosition;
+		}
+
+		public void Forward(int units)
+		{
+			Vector2 newPosition = new Vector2(this.position.X, this.position.Y - units);
+
+			Vector2.RotateAboutOrigin(ref newPosition, this.position, MathHelper.ToRadians(this.rotation));
 
 			this.renderer.DrawLine(this.position, newPosition, Color.Red);
-
+			
 			this.position = newPosition;
+		}
+
+		public void Left(int degrees)
+		{
+			this.rotation -= degrees;
+
+			if (this.rotation < 0.0f)
+				this.rotation += 360.0f;
+		}
+
+		public void Right(int degrees)
+		{
+			this.rotation += degrees;
+
+			if (this.rotation >= 360.0f)
+				this.rotation -= 360.0f;
 		}
 
 		public void End()

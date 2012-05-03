@@ -62,6 +62,8 @@ namespace TurtleSharp.Presenters
 
 				if (results.Errors.Count == 0)
 				{
+					this.view.ClearCompilerErrors();
+
 					this.program = null;
 
 					foreach (Type type in results.CompiledAssembly.GetTypes())

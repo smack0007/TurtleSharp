@@ -4,6 +4,12 @@ namespace TurtleSharp
 {
 	public interface ITurtleGraphics
 	{
-		void Forward(int pixels);
+		void Home();
+
+		void Forward(int units);
+
+		void Left(int degrees);
+
+		void Right(int degrees);
 	}
 }
